@@ -13,41 +13,50 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import stockMarketLogger.Stock;
-import constants.Database;
 
 /**
- * Servlet implementation class index
+ * Servlet implementation class History
  */
-@WebServlet("/index")
-public class index extends HttpServlet {
+@WebServlet("/History")
+public class History extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public index() {
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public History() {
         super();
         // TODO Auto-generated constructor stub
     }
 
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-
+//		response.getWriter().append("Served at: ").append(request.getContextPath());
 		doPost( request, response );
 	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-//		doGet(request, response);
 		
-		String url = "/index.jsp";
+		doGet(request, response);
+		String url = "/history.jsp";
+		// get stock from DB
 		Stock apple = new Stock("AAPL");
-		updateDB( apple );
+//		updateDB( apple );
 		request.setAttribute("stock", apple);
 		getServletContext()
 		.getRequestDispatcher( url )
 		.forward(request, response);
 	}
 	
-	protected void updateDB( Stock x ) {
+	// 
+	protected void selectFromDB( Stock x ) {
 		Connection con;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -67,5 +76,6 @@ public class index extends HttpServlet {
 		} catch ( SQLException e ) {
 			e.printStackTrace();
 		}
-	}
+
+	}	
 }

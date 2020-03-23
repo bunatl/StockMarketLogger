@@ -31,19 +31,10 @@ public class Stock {
 	
 	private boolean parseHTML() throws IOException {
 		String url = this.baseURL + this.stockCode;
-				
 		Document doc = Jsoup.connect( url ).get();
 		
-		setStockPrice( doc );
-		setStockName( doc );
-		return true;
-	}
-	
-	private void setStockName( Document doc ) {
-		this.stockName = doc.select("h1.wsod_fLeft.wsod_narrowH1Container").first().text();
-	}
-		
-	private void setStockPrice( Document doc ) {
 		this.stockPrice = Double.parseDouble( doc.select("td.wsod_last span").first().text() );
+		this.stockName = doc.select("h1.wsod_fLeft").first().text();
+		return true;
 	}
 }
