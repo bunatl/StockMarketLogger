@@ -11,6 +11,7 @@ public class History {
 			
 			this.sqlRows = new HashSet<String>();
 			
+			// https://stackoverflow.com/questions/24229442/print-the-data-in-resultset-along-with-column-names
 			try {
 				ResultSetMetaData rsmd = resultSet.getMetaData();
 				int columnsNumber = rsmd.getColumnCount();
