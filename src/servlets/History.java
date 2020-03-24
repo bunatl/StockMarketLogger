@@ -3,6 +3,8 @@ package servlets;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -12,52 +14,45 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import stockMarketLogger.Stock;
+import stockMarketLogger.History;
 
 /**
- * Servlet implementation class History
+ * Servlet implementation class history
  */
-@WebServlet("/History")
-public class History extends HttpServlet {
+@WebServlet("/history")
+public class history extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public History() {
+
+    public history() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
 		doPost( request, response );
+//		System.out.println( "running" );
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		doGet(request, response);
 		String url = "/history.jsp";
-		// get stock from DB
-		Stock apple = new Stock("AAPL");
-//		updateDB( apple );
-		request.setAttribute("stock", apple);
+		ResultSet resultSet = selectAllFromDB();
+		// custom class transforms resultSet into a Set - lines of records
+		History h = new History( resultSet );
+
+		request.setAttribute("allStocks", h.getRows() );
 		getServletContext()
 		.getRequestDispatcher( url )
 		.forward(request, response);
 	}
 	
-	// 
-	protected void selectFromDB( Stock x ) {
+	// query into DB
+	protected ResultSet selectAllFromDB() {
 		Connection con;
+		ResultSet res = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection( 
@@ -66,16 +61,15 @@ public class History extends HttpServlet {
 					constants.Database.DATABASE_PASSWORD );
 					
 			Statement s = con.createStatement();
-			String query = "INSERT INTO stockHistory" + 
-			"( id, name, price, priceTime  )" + 
-			"VALUE ( NULL, '" + x.getStockName() + "', '" + x.getStockPrice() + "', now())";
+			String query = "SELECT *" + 
+							"FROM stockhistory";
 			
-			s.executeUpdate( query );
+			res = s.executeQuery( query );
 		} catch ( ClassNotFoundException e ) {
 			e.printStackTrace();
 		} catch ( SQLException e ) {
 			e.printStackTrace();
 		}
-
+		return res;
 	}	
 }

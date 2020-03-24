@@ -5,8 +5,6 @@ import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import constants.Exchnages;
-
 public class Stock {
 
 	public Stock( String stockCode ) throws IOException{
