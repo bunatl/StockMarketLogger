@@ -28,13 +28,6 @@ public class history extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-//		response.getWriter().append("Served at: ").append(request.getContextPath());
-		doPost( request, response );
-//		System.out.println( "running" );
-	}
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
@@ -43,6 +36,7 @@ public class history extends HttpServlet {
 		// custom class transforms resultSet into a Set - lines of records
 		History h = new History( resultSet );
 
+		// send response to front-end
 		request.setAttribute("allStocks", h.getRows() );
 		getServletContext()
 		.getRequestDispatcher( url )

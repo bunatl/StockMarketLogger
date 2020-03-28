@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class History {
 
+		// fill result from DB into a set
 		public History( ResultSet resultSet ) {
 			
 			this.sqlRows = new HashSet<String>();
